@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, useNavigate, useLocation } from 'react-router-dom';
+import Categories from './components/Categories';
+import Products from './components/Products';
+import Search from './components/Search';
+import Layout from './components/Layout';
 
-function App() {
+const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const [selectedCategory, setSelectedCategory] = useState(queryParams.get('category') || '');
+  const [searchQuery, setSearchQuery] = useState(queryParams.get('q') || '');
+
+  const updateQueryParams = (category, query) => {
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    if (query) params.set('q', query);
+    navigate({ search: params.toString() });
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    updateQueryParams(category, searchQuery);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    updateQueryParams(selectedCategory, query);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Search onSearch={handleSearch} />
+      <Categories selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} />
+      <Products selectedCategory={selectedCategory} />
+    </Layout>
   );
-}
+};
 
 export default App;

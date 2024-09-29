@@ -1,0 +1,13 @@
+.categories-container {
+    margin: 20px 0;
+  }
+  
+  .categories-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
